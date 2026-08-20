@@ -332,6 +332,10 @@
       <div class="section-h"><span class="dot dot-ember"></span><h3>B) A desarrollar</h3><span class="section-count" id="count-desarrollar">0</span></div>
       <p style="font-size:13px; margin-top:-6px;">Lo que vas a trabajar con tu Acompañante este período.</p>
       <ul class="result-list" id="list-desarrollar"></ul>
+
+      <div class="section-h"><span class="dot dot-gold"></span><h3>C) A verificar con tu Acompañante</h3><span class="section-count" id="count-verificar">0</span></div>
+      <p style="font-size:13px; margin-top:-6px;">Estos indicadores del Manual hablan de hechos concretos —cuántos chicos, qué entregaste, qué recurso usaste—, y el test no tiene forma de saber si pasaron. No cuentan ni como logrado ni como pendiente: se chequean cara a cara en la reunión.</p>
+      <ul class="result-list" id="list-verificar"></ul>
     </div>
 
     <div class="card" style="margin-top:22px;">
@@ -796,7 +800,16 @@ const LATERALS = [
   }
 ];
 
-/* ================== INDICADORES (para plan) ================== */
+/* ================== INDICADORES (para plan) ==================
+   Algunos indicadores del Manual no describen una capacidad sino un HECHO
+   verificable: una cantidad ("al menos 3"), un entregable concreto ("ya
+   elaboré un Plan de Desempeño") o el uso de un recurso nombrado ("la
+   biblioteca web"). El test mide disposición, no evidencia: no tiene forma
+   de saber si eso pasó de verdad. Esos van marcados con `verify:true` (o
+   con un campo `verify:'texto'` cuando el indicador mezcla ambas cosas) y
+   terminan en la sección C — a chequear cara a cara con el Acompañante,
+   nunca dados por logrados ni contados como debilidad.
+================== */
 const CLUSTERS = [
   {id:'cuidado', nombre:'Cuidado y protección', ref:'Indicadores comunes 1–9, 24–25',
    text1:'Identifico riesgos físicos y emocionales en la unidad, sé actuar según protocolo ante una vulneración de derechos, y manejo primeros auxilios básicos y el botiquín.', trigger:['trascendencia','critico']},
@@ -804,38 +817,45 @@ const CLUSTERS = [
    text1:'Animo instancias democráticas, participo en el diagnóstico y evaluación de actividades, y aplico el Marco Simbólico (cuentos, ceremonias, danzas) en la unidad.', trigger:['adapt','equipo']},
   {id:'progresion', nombre:'Progresión personal', ref:'Indicador común 17',
    text1:'Acompaño el seguimiento de la progresión personal de mi pequeño grupo, con la coordinación del Jefe/a de Unidad.',
-   text2:'Garantizo que cada chico/a de la unidad tenga su seguimiento de progresión y coordino ese proceso con el equipo.', trigger:['trascendencia']},
+   text2:'Garantizo que cada chico/a de la unidad tenga su seguimiento de progresión y coordino ese proceso con el equipo.', trigger:['trascendencia'],
+   verify:true},
   {id:'airelibre', nombre:'Vida al aire libre y campamentos', ref:'Indicadores comunes 21–23',
    text1:'Participo en la planificación y conducción de campamentos, aplico técnicas de vida al aire libre y promuevo hábitos saludables.', trigger:['adapt']},
   {id:'equipoconsejo', nombre:'Equipo de Educadores y Consejo', ref:'Indicadores comunes 27, 29–30',
    text1:'Participo activamente en las reuniones de mi Unidad junto al Equipo, y colaboro para resolver conflictos entre los chicos/as.',
    text2:'Coordino al Equipo de Educadores, participo en el Consejo de Grupo y resuelvo conflictos dentro del equipo de adultos.', trigger:['equipo']},
   {id:'digital', nombre:'Herramientas digitales y formación', ref:'Indicadores comunes 28, 32–33',
-   text1:'Conozco y uso la biblioteca web de Scouts de Argentina, uso al menos una herramienta digital para el aprendizaje, y ya elaboré un Plan de Desempeño con mi Acompañante.', trigger:['critico']}
+   text1:'Conozco y uso la biblioteca web de Scouts de Argentina, uso al menos una herramienta digital para el aprendizaje, y ya elaboré un Plan de Desempeño con mi Acompañante.', trigger:['critico'],
+   verify:true}
 ];
 
 const RAMA_ITEMS = {
   castores:[
     {id:'cast1', text:'Genero un ambiente confiable donde compartir es la base, y acompaño el juego libre con imaginación y disfraces.', ref:'Específicos Castores 1–3'},
-    {id:'cast2', text:'Aplico técnicas de bajo impacto ambiental según la edad y hago seguimiento de al menos 3 Castores.', ref:'Específicos Castores 4–6'}
+    {id:'cast2', text:'Aplico técnicas de bajo impacto ambiental según la edad.', ref:'Específicos Castores 4–6',
+     verify:'Hice seguimiento personal de al menos 3 Castores durante el período.'}
   ],
   lobatos:[
     {id:'lob1', text:'Uso El Libro de las Tierras Vírgenes como referencia del Marco Simbólico, narro cuentos y escucho con paciencia.', ref:'Específicos Lobatos 1–4'},
     {id:'lob2', text:'Los hago protagonistas, genero el hábito del servicio y los involucro en los órganos de gobierno de la unidad.', ref:'Específicos Lobatos 5, 7–10'},
-    {id:'lob3', text:'Hago seguimiento personal de al menos 3 Lobatos/Lobeznas.', ref:'Específicos Lobatos 11–12'}
+    {id:'lob3', ref:'Específicos Lobatos 11–12',
+     verify:'Hice seguimiento personal de al menos 3 Lobatos/Lobeznas durante el período.'}
   ],
   scouts:[
     {id:'sc1', text:'Fomento que las Patrullas desarrollen autonomía y liderazgo situacional, y genero el hábito de "la buena acción".', ref:'Específicos Scouts 1–4, 6'},
-    {id:'sc2', text:'Hago seguimiento personal de al menos 3 Scouts.', ref:'Específicos Scouts 5, 7'}
+    {id:'sc2', ref:'Específicos Scouts 5, 7',
+     verify:'Hice seguimiento personal de al menos 3 Scouts durante el período.'}
   ],
   caminantes:[
     {id:'cam1', text:'Acompaño la Hoja de Marcha y la Carta de Marcha, y motivo el proceso de las Empresas.', ref:'Específicos Caminantes 1–3'},
     {id:'cam2', text:'Organizo o acompaño Rallies y Raids, y garantizo que elijan y capaciten a su representante.', ref:'Específicos Caminantes 4–7'},
-    {id:'cam3', text:'Hago seguimiento personal de al menos 3 Caminantes.', ref:'Específicos Caminantes 12'}
+    {id:'cam3', ref:'Específicos Caminantes 12',
+     verify:'Hice seguimiento personal de al menos 3 Caminantes durante el período.'}
   ],
   rovers:[
     {id:'rov1', text:'Acompaño el Plan Personal de Acción (PPA) y motivo la Carta de Comunidad.', ref:'Específicos Rovers 1–3'},
-    {id:'rov2', text:'Acompaño Partidas y Campamentos en Soledad, y hago seguimiento de al menos 3 Rovers.', ref:'Específicos Rovers 4–5, 8'}
+    {id:'rov2', text:'Acompaño Partidas y Campamentos en Soledad.', ref:'Específicos Rovers 4–5, 8',
+     verify:'Hice seguimiento personal de al menos 3 Rovers durante el período.'}
   ]
 };
 
@@ -1156,6 +1176,7 @@ function showResults(){
   const lists = buildPlanLists(scores, nivel);
   window.__logrado = lists.logrado;
   window.__desarrollar = lists.desarrollar;
+  window.__verificar = lists.verificar;
   window.__archNombre = arch.nombre;
 
   autoEnviarResultado();
@@ -1246,7 +1267,7 @@ function writeCarta(scores, relSorted, arch, nivel){
 
 /* ---- Plan lists ---- */
 function buildPlanLists(scores, nivel){
-  const logrado=[], desarrollar=[];
+  const logrado=[], desarrollar=[], verificar=[];
   __debiles = computeDebiles(scores); // define qué competencias son las más débiles
 
   // esenciales: umbral alto + regla de los más débiles
@@ -1283,6 +1304,8 @@ function buildPlanLists(scores, nivel){
     const prom = triggers.reduce((a,t)=>a+scores[t],0)/triggers.length;
     const text = (c.text2 && nivel>=2)?c.text2:c.text1;
     const algunDebil = triggers.some(t=>__debiles.has(t));
+    // Indicador fáctico: el test no puede saber si pasó. Va a C, sin puntaje.
+    if(c.verify){ verificar.push({idx:`${c.nombre} (${c.ref})`, text}); return; }
     if(prom>=UMBRAL_LOGRADO && !algunDebil){
       logrado.push({idx:`${c.nombre} (${c.ref})`, text});
     } else {
@@ -1295,6 +1318,9 @@ function buildPlanLists(scores, nivel){
   if(userData.rama!=='ninguna' && RAMA_ITEMS[userData.rama]){
     const logradosCount = Object.values(passMap).filter(Boolean).length;
     RAMA_ITEMS[userData.rama].forEach(item=>{
+      // La parte fáctica (cantidades, entregables) siempre va a C.
+      if(item.verify) verificar.push({idx:item.ref, text:item.verify});
+      if(!item.text) return; // el indicador era fáctico entero
       if(logradosCount>=3) logrado.push({idx:item.ref, text:item.text});
       else desarrollar.push({idx:item.ref, text:`Conviene revisarlo con tu Acompañante: ${item.text}`});
     });
@@ -1302,14 +1328,16 @@ function buildPlanLists(scores, nivel){
 
   document.getElementById('count-logrado').textContent = logrado.length;
   document.getElementById('count-desarrollar').textContent = desarrollar.length;
+  document.getElementById('count-verificar').textContent = verificar.length;
+  document.getElementById('list-verificar').innerHTML = verificar.length? verificar.map(li=>`<li><span class="idx">${li.idx}</span>${li.text}</li>`).join('') : '<li>No quedó nada pendiente de chequear.</li>';
   document.getElementById('list-logrado').innerHTML = logrado.length? logrado.map(li=>`<li><span class="idx">${li.idx}</span>${li.text}</li>`).join('') : '<li>Todavía no hay competencias consolidadas — es un punto de partida honesto, no un problema. Con tu Acompañante van a trazar el camino.</li>';
   document.getElementById('list-desarrollar').innerHTML = desarrollar.length? desarrollar.map(li=>`<li><span class="idx">${li.idx}</span>${li.text}</li>`).join('') : '<li>¡Muy buen recorrido! No quedó nada urgente por trabajar. Igual conviene revisar con tu Acompañante cómo seguir creciendo.</li>';
 
-  return {logrado, desarrollar};
+  return {logrado, desarrollar, verificar};
 }
 
 /* ================== PDF ================== */
-function buildPDF(logrado, desarrollar, archNombre){
+function buildPDF(logrado, desarrollar, verificar, archNombre){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:'pt', format:'a4'});
   const marginX = 48;
@@ -1370,6 +1398,18 @@ function buildPDF(logrado, desarrollar, archNombre){
     paragraph('Base sólida y pareja. Igual conviene revisar con el Acompañante qué sigue.', {size:10, gap:10});
   }
 
+  y += 4; rule();
+  heading('C) A verificar con tu Acompañante', 12.5);
+  paragraph('Indicadores del Manual que afirman hechos concretos. El test mide disposición, no evidencia: no cuentan como logrado ni como pendiente hasta chequearlos en la reunión.', {size:9.5, color:[110,110,110], gap:8});
+  if(verificar && verificar.length){
+    verificar.forEach(li=>{
+      paragraph(li.idx, {bold:true, size:10, color:[150,120,40], gap:2});
+      paragraph(li.text.replace(/<[^>]+>/g,''), {size:10, indent:10, gap:10});
+    });
+  } else {
+    paragraph('No quedó nada pendiente de chequear.', {size:10, gap:10});
+  }
+
   return doc;
 }
 
@@ -1387,7 +1427,7 @@ function nombreArchivo(){
 }
 
 function descargarPDF(){
-  const doc = buildPDF(window.__logrado||[], window.__desarrollar||[], window.__archNombre||'');
+  const doc = buildPDF(window.__logrado||[], window.__desarrollar||[], window.__verificar||[], window.__archNombre||'');
   doc.save(nombreArchivo());
   showToast('PDF descargado ✓');
 }
@@ -1402,7 +1442,8 @@ function armarPayload(){
     periodo: PERIODO_FIJO,
     arquetipo: window.__archNombre || '—',
     logrado: (window.__logrado||[]).map(li=>({titulo:li.idx, texto:strip(li.text)})),
-    desarrollar: (window.__desarrollar||[]).map(li=>({titulo:li.idx, texto:strip(li.text)}))
+    desarrollar: (window.__desarrollar||[]).map(li=>({titulo:li.idx, texto:strip(li.text)})),
+    verificar: (window.__verificar||[]).map(li=>({titulo:li.idx, texto:strip(li.text)}))
   };
 }
 
