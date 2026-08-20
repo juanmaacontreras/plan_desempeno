@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Fogón de los Educadores — Sendero de Desempeño · Perito Moreno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#12191c;
+    --bg-1:#182125;
+    --bg-2:#1f2b30;
+    --bg-3:#28373d;
+    --line: rgba(238,240,235,0.12);
+    --line-strong: rgba(238,240,235,0.22);
+    --ink:#eef0eb;
+    --ink-dim:#a6b2b0;
+    --ink-faint:#78878a;
+    --ember:#e2894a;
+    --ember-soft:#e2894a2e;
+    --gold:#d4b048;
+    --gold-soft:#d4b0482a;
+    --sage:#83b08e;
+    --sage-soft:#83b08e26;
+    --sky:#6ba8bd;
+    --plum:#b083b0;
+    --danger:#cf7060;
+    --radius:15px;
+    --shadow: 0 26px 60px -24px rgba(0,0,0,0.65);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 640px at 12% -12%, #21322f 0%, transparent 58%),
+      radial-gradient(940px 520px at 102% -4%, #1c2a30 0%, transparent 52%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:780px; margin:0 auto; padding:26px 20px 96px;}
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; margin:0 0 8px; letter-spacing:-0.01em;}
+  h1{font-weight:700;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--ember); display:flex; align-items:center; gap:8px; margin-bottom:10px;
+  }
+  .eyebrow::before{content:""; width:16px; height:1px; background:var(--ember); display:inline-block;}
+  p{color:var(--ink-dim); margin:0 0 14px;}
+  a{color:var(--gold);}
+
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:30px;}
+  .brand-mark{width:36px; height:36px; flex:none;}
+  .brand-text{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); letter-spacing:0.03em; line-height:1.5;}
+  .brand-text b{color:var(--ink-dim); font-weight:500;}
+
+  /* Progress: constellation of embers */
+  .trail{position:relative; height:30px; margin:0 0 30px;}
+  .trail-track{position:absolute; top:14px; left:0; right:0; height:2px;
+    background-image: linear-gradient(90deg, var(--line-strong) 0 5px, transparent 5px 11px);
+    background-size:11px 2px;}
+  .trail-fill{position:absolute; top:14px; left:0; height:2px; background:var(--ember); transition:width .45s ease;}
+  .trail-spark{position:absolute; top:9px; width:12px; height:12px; margin-left:-6px; transition:left .45s ease;}
+  .trail-spark svg{width:12px; height:12px;}
+  .trail-label{position:absolute; top:-4px; right:0; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint); letter-spacing:0.03em;}
+
+  .card{background:linear-gradient(180deg, var(--bg-2), var(--bg-1)); border:1px solid var(--line);
+    border-radius:var(--radius); padding:28px 26px; box-shadow:var(--shadow);}
+  .screen{display:none;}
+  .screen.active{display:block; animation:rise .42s ease both;}
+  @keyframes rise{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+
+  .intro-hero{display:flex; gap:22px; align-items:flex-start; margin-bottom:20px;}
+  .intro-hero svg{flex:none; width:58px; height:58px; margin-top:4px;}
+
+  /* Explainer block */
+  .explain{
+    border:1px solid var(--line); border-radius:12px; background:rgba(0,0,0,0.16);
+    padding:2px 0; margin:4px 0 26px;
+  }
+  .explain details{padding:0;}
+  .explain summary{
+    list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; gap:12px;
+    font-family:'Fraunces', serif; font-size:16px; font-weight:600; color:var(--ink);
+  }
+  .explain summary::-webkit-details-marker{display:none;}
+  .explain summary .chev{margin-left:auto; transition:transform .25s ease; color:var(--gold); flex:none;}
+  .explain details[open] summary .chev{transform:rotate(90deg);}
+  .explain .body{padding:0 18px 20px; animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0;} to{opacity:1;}}
+  .explain h4{font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ember); margin:18px 0 6px;}
+  .explain p{font-size:14px; color:var(--ink-dim); margin:0 0 12px;}
+  .explain .flow{
+    display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; margin:10px 0 6px;
+  }
+  .explain .flow .step{
+    flex:1; min-width:130px; background:var(--bg-1); border:1px solid var(--line-strong);
+    border-radius:9px; padding:11px 12px;
+  }
+  .explain .flow .step .n{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--gold); letter-spacing:0.06em;}
+  .explain .flow .step .h{font-weight:600; font-size:13.5px; color:var(--ink); margin:3px 0 2px;}
+  .explain .flow .step .d{font-size:12px; color:var(--ink-faint); line-height:1.45;}
+  .explain .arrow{align-self:center; color:var(--ink-faint); flex:none;}
+  @media (max-width:560px){ .explain .arrow{display:none;} }
+  .explain .who{
+    background:var(--sage-soft); border:1px solid rgba(131,176,142,0.3); border-radius:9px;
+    padding:12px 14px; margin:12px 0 2px; font-size:13.5px; color:var(--ink-dim);
+  }
+  .explain .who b{color:var(--ink);}
+  .intro-lead{font-size:14px; color:var(--ink-dim); margin-bottom:18px;}
+  .field{margin-bottom:18px;}
+  label{display:block; font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); margin-bottom:7px;}
+  input[type=text], select, textarea{width:100%; background:var(--bg-1); border:1px solid var(--line-strong); color:var(--ink);
+    border-radius:9px; padding:11px 13px; font-family:'Work Sans', sans-serif; font-size:15px;}
+  input:focus, select:focus, textarea:focus{outline:2px solid var(--ember); outline-offset:1px; border-color:var(--ember);}
+  select{appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23d4b048' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 13px center;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:540px){.field-row{grid-template-columns:1fr;}}
+
+  .btn{font-family:'Work Sans', sans-serif; font-weight:600; font-size:15px; border:none; border-radius:9px;
+    padding:13px 22px; cursor:pointer; transition:transform .15s ease, filter .15s ease;}
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--ember); color:#1a1206;}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-ghost{background:transparent; color:var(--ink-dim); border:1px solid var(--line-strong);}
+  .btn-ghost:hover{color:var(--ink); border-color:var(--ink-dim);}
+  .btn-row{display:flex; justify-content:space-between; align-items:center; margin-top:24px; gap:12px;}
+  .btn[disabled]{opacity:0.32; cursor:not-allowed;}
+
+  .qtag{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ember); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px;}
+  .qtag .chip{border:1px solid var(--line-strong); border-radius:20px; padding:2px 9px; color:var(--ink-faint);}
+  .qscene{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-faint); letter-spacing:0.03em; text-transform:uppercase; margin-bottom:8px;}
+  .qtitle{font-family:'Fraunces', serif; font-size:23px; line-height:1.34; margin-bottom:6px; font-weight:600;}
+  .qsub{color:var(--ink-faint); font-size:13.5px; margin-bottom:22px;}
+  .options{display:flex; flex-direction:column; gap:10px;}
+  .opt{display:flex; align-items:flex-start; gap:14px; border:1px solid var(--line-strong); background:var(--bg-1);
+    border-radius:11px; padding:14px 16px; cursor:pointer; transition:border-color .15s ease, background .15s ease;}
+  .opt:hover{border-color:var(--ember);}
+  .opt.selected{border-color:var(--ember); background:linear-gradient(180deg, var(--ember-soft), transparent);}
+  .opt-dot{width:18px; height:18px; border-radius:50%; border:2px solid var(--line-strong); flex:none; margin-top:1px;
+    display:flex; align-items:center; justify-content:center;}
+  .opt.selected .opt-dot{border-color:var(--ember);}
+  .opt.selected .opt-dot::after{content:""; width:9px; height:9px; border-radius:50%; background:var(--ember);}
+  .opt-text{font-size:14.5px; color:var(--ink); line-height:1.45;}
+
+  .q-illustration{
+    background:var(--bg-1); border:1px solid var(--line-strong); border-radius:12px;
+    padding:14px 10px; margin-bottom:20px;
+  }
+  .q-illustration svg{width:100%; height:auto; max-height:140px; display:block;}
+  .opt-icon{
+    width:34px; height:34px; border-radius:9px; flex:none; margin-top:-2px;
+    background:var(--bg-2); border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt-icon svg{width:19px; height:19px;}
+  .opt.selected .opt-icon{border-color:var(--ember); background:var(--ember-soft);}
+
+  /* Results */
+  .archetype-badge{display:flex; gap:18px; align-items:center; padding:22px; margin-bottom:20px; border-radius:var(--radius);
+    background:linear-gradient(135deg, var(--gold-soft), transparent 72%); border:1px solid var(--line-strong);}
+  .archetype-badge svg{width:52px; height:52px; flex:none; color:var(--gold);}
+  .archetype-name{font-family:'Fraunces', serif; font-size:26px; margin:0 0 4px; font-weight:700;}
+  .archetype-sub{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase;}
+
+  .section-h{display:flex; align-items:center; gap:10px; margin:30px 0 12px;}
+  .section-h .dot{width:8px; height:8px; border-radius:50%; flex:none;}
+  .dot-ember{background:var(--ember);} .dot-sage{background:var(--sage);} .dot-gold{background:var(--gold);}
+  .section-h h3{font-size:17px; margin:0;}
+  .section-count{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint);
+    border:1px solid var(--line); border-radius:20px; padding:2px 9px; margin-left:auto;}
+
+  /* Radar */
+  .radar-wrap{display:flex; gap:20px; align-items:center; flex-wrap:wrap; justify-content:center;}
+  .radar-svg{width:300px; height:300px; flex:none; overflow:visible;}
+  .radar-legend{flex:1; min-width:200px; display:flex; flex-direction:column; gap:9px;}
+  .radar-legend .lg{display:flex; align-items:center; gap:10px; font-size:13.5px;}
+  .radar-legend .lg .sw{width:10px; height:10px; border-radius:3px; flex:none;}
+  .radar-legend .lg b{color:var(--ink);}
+  .radar-legend .lg .lvl{margin-left:auto; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint);}
+
+  .carta{font-family:'Fraunces', serif; font-size:15.5px; line-height:1.7; color:var(--ink-dim); font-style:italic;
+    border-left:2px solid var(--ember); padding:4px 0 4px 18px; margin:6px 0 4px;}
+  .carta b{color:var(--ink); font-style:normal; font-weight:600;}
+  .carta .firma{display:block; font-style:normal; font-family:'IBM Plex Mono', monospace; font-size:11px;
+    color:var(--ink-faint); letter-spacing:0.05em; margin-top:12px; text-transform:uppercase;}
+
+  ul.result-list{list-style:none; margin:0 0 4px; padding:0; display:flex; flex-direction:column; gap:9px;}
+  ul.result-list li{background:var(--bg-1); border:1px solid var(--line); border-radius:9px; padding:11px 13px; font-size:14px; color:var(--ink-dim);}
+  ul.result-list li b{color:var(--ink); font-weight:600;}
+  ul.result-list li .idx{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-faint); display:block; margin-bottom:3px; letter-spacing:0.02em;}
+
+  .plan-box textarea{min-height:170px; resize:vertical; font-size:14px; line-height:1.6;}
+  .helper{font-size:12.5px; color:var(--ink-faint); margin-top:6px;}
+  .actions-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:28px;}
+
+  .toast{position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--bg-3); border:1px solid var(--line-strong); color:var(--ink); padding:11px 18px;
+    border-radius:9px; font-size:13.5px; opacity:0; pointer-events:none; transition:all .25s ease; z-index:50;}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  footer{margin-top:38px; text-align:center; color:var(--ink-faint); font-size:12px; font-family:'IBM Plex Mono', monospace; line-height:1.7;}
+
+  @media print{
+    body{background:#fff; color:#111;}
+    .no-print{display:none !important;}
+    .card{box-shadow:none; border:1px solid #ccc; background:#fff;}
+    .carta{color:#333;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 64 64" fill="none" stroke="var(--ember)" stroke-width="2">
+      <path d="M32 8c4 8-2 10-2 16 0 4 3 6 3 6-6 2-9-3-9-8 0 0-6 6-6 15 0 10 8 17 18 17s18-7 18-17c0-14-12-18-12-29 0 0-6 2-6 10 0 5 3 7 3 7-4-1-7-4-7-17z" stroke-linejoin="round"/>
+    </svg>
+    <div class="brand-text">Unidad Scout <b>Perito Moreno</b> · G.S. San Jorge Mártir N°169<br>El Fogón de los Educadores — herramienta de acompañamiento</div>
+  </div>
+
+  <!-- INTRO -->
+  <section class="screen active" id="screen-intro">
+    <div class="eyebrow">Sentate al fuego</div>
+    <div class="card">
+      <div class="intro-hero">
+        <svg viewBox="0 0 64 64" fill="none" stroke="var(--ember)" stroke-width="2">
+          <path d="M12 50h40" stroke-linecap="round"/>
+          <path d="M20 50l6-20M44 50l-6-20M26 30l6 8 6-8M32 16v22" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="32" cy="13" r="2.6" fill="var(--ember)" stroke="none"/>
+        </svg>
+        <div>
+          <h1>El Fogón de los Educadores</h1>
+          <p>No es un test de "qué animal scout sos". Son escenas reales de la vida de la unidad, algunas preguntas de costado y postas de prioridad, sin respuestas correctas a la vista. Cada una revela cómo te parás frente a tu función — y al final te devuelve un retrato honesto para llevar a la charla con tu <b>Acompañante</b>.</p>
+        </div>
+      </div>
+
+      <div class="explain">
+        <details open>
+          <summary>
+            ¿Qué es esto y por qué lo estás haciendo?
+            <svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="body">
+            <p>Si nunca leíste ningún manual, tranqui: acá está todo lo que necesitás saber para arrancar.</p>
+
+            <h4>El Plan de Desempeño, en criollo</h4>
+            <p>Todo adulto en Scouts tiene una <b>función</b> (Ayudante de Unidad, Jefe/a de Unidad, etc.), y esa función pide ciertas capacidades. El <b>Plan de Desempeño</b> es simplemente un acuerdo escrito entre vos y quien te acompaña, donde queda claro <b>qué ya sabés hacer bien</b> y <b>qué te falta desarrollar</b>, con acciones y plazos concretos para lograrlo. No es un examen ni una nota: es un mapa de tu propio crecimiento, hecho a tu medida.</p>
+
+            <h4>Las 5 capacidades que se miran</h4>
+            <p>El movimiento define cinco "competencias esenciales" para cualquier función: <b>adaptarse al cambio</b>, <b>vivir la cultura del movimiento</b> (coherencia con la Ley y la Promesa), <b>trabajar en equipo</b>, <b>pensar de forma crítica y creativa</b> y el <b>sentido de trascendencia</b> (la dimensión más profunda de lo que hacemos). Este juego mide cómo estás parado en cada una — sin preguntártelo de frente, para que las respuestas sean honestas y no las que "quedan bien".</p>
+
+            <div class="who">Este juego te da un <b>primer retrato</b>, no la palabra final. El paso que sigue —y el que de verdad cuenta— es sentarte con tu <b>Acompañante</b> a cerrar el plan definitivo. Esta herramienta te ahorra la hoja en blanco; no reemplaza esa charla.</div>
+          </div>
+        </details>
+      </div>
+
+      <p class="intro-lead">Son 39 postas, unos 18-20 minutos. Respondé con lo que hacés hoy, no con lo que te gustaría hacer — ahí está el valor.</p>
+
+      <div class="field"><label>Nombre y apellido</label><input type="text" id="in-nombre" placeholder="Ej: Juan Manuel Pérez"></div>
+      <div class="btn-row">
+        <span class="helper">Ayudante de Unidad · Rama Scouts · Ago 2026 – Ene 2027</span>
+        <button class="btn btn-primary" onclick="startQuiz()">Encender el fuego →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="screen-quiz">
+    <div class="trail no-print">
+      <div class="trail-track"></div>
+      <div class="trail-fill" id="trail-fill"></div>
+      <div class="trail-spark" id="trail-spark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ember)" stroke-width="2"><path d="M12 2l2.4 6.5L21 11l-6.6 2.5L12 20l-2.4-6.5L3 11l6.6-2.5z" stroke-linejoin="round" fill="var(--ember)"/></svg>
+      </div>
+      <div class="trail-label" id="trail-label">Posta 1</div>
+    </div>
+    <div class="card">
+      <div class="qtag" id="q-tag"></div>
+      <div class="qscene" id="q-scene"></div>
+      <div class="qtitle" id="q-title"></div>
+      <div class="qsub" id="q-sub"></div>
+      <div class="q-illustration" id="q-illustration" style="display:none;"></div>
+      <div class="options" id="q-options"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="btn-back" onclick="prevQuestion()">← Atrás</button>
+        <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="screen-results">
+    <div class="eyebrow">Llegaste a la cima</div>
+
+    <div class="card">
+      <div class="archetype-badge">
+        <svg id="arch-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"></svg>
+        <div>
+          <div class="archetype-sub">Tu retrato de hoy</div>
+          <h2 class="archetype-name" id="arch-name"></h2>
+          <p id="arch-desc" style="margin:0; font-size:14px;"></p>
+        </div>
+      </div>
+
+      <div class="section-h"><span class="dot dot-gold"></span><h3>Cómo se reparte tu energía</h3></div>
+      <p style="font-size:13px; margin-top:-6px;">Las cinco competencias esenciales que el Manual pide para toda función. Cuanto más al borde, más asentada.</p>
+      <div class="radar-wrap">
+        <svg class="radar-svg" id="radar" viewBox="0 0 280 280"></svg>
+        <div class="radar-legend" id="radar-legend"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="section-h" style="margin-top:0;"><span class="dot dot-ember"></span><h3>Carta al pie del mástil</h3></div>
+      <div class="carta" id="carta"></div>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="section-h" style="margin-top:0;"><span class="dot dot-sage"></span><h3>A) Logrado</h3><span class="section-count" id="count-logrado">0</span></div>
+      <p style="font-size:13px; margin-top:-6px;">Lo que ya mostrás en tu desempeño cotidiano.</p>
+      <ul class="result-list" id="list-logrado"></ul>
+
+      <div class="section-h"><span class="dot dot-ember"></span><h3>B) A desarrollar</h3><span class="section-count" id="count-desarrollar">0</span></div>
+      <p style="font-size:13px; margin-top:-6px;">Lo que vas a trabajar con tu Acompañante este período.</p>
+      <ul class="result-list" id="list-desarrollar"></ul>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="section-h" style="margin-top:0;"><span class="dot dot-gold"></span><h3>Cerrá tu paso por el fogón</h3></div>
+      <p style="font-size:13px;" id="envio-status">Enviando tu resultado…</p>
+      <div class="actions-row no-print" style="margin-top:14px;">
+        <button class="btn btn-primary" onclick="descargarPDF()">↓ Descargar mi PDF</button>
+      </div>
+      <div class="helper">Tu resultado se manda solo a tu Acompañante apenas terminás — no tenés que hacer nada. El PDF de acá arriba es una copia para vos.</div>
+      <div class="btn-row" style="margin-top:6px;"><button class="btn btn-ghost" onclick="restart()" style="margin-left:auto;">Volver a empezar</button></div>
+    </div>
+  </section>
+
+  <footer class="no-print">Basado en el Manual de Funciones y Competencias 2022 y la Planilla de Plan de Desempeño<br>de Scouts de Argentina Asociación Civil. Herramienta interna, no reemplaza el acompañamiento.</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================== COMPETENCIAS ================== */
+const COMP = {
+  adapt:        {nombre:'Adaptabilidad al cambio', short:'Adaptabilidad', color:'#e2894a', icon:'brujula'},
+  cultura:      {nombre:'Cultura Asociativa', short:'Cultura Asociativa', color:'#d4b048', icon:'llama'},
+  equipo:       {nombre:'Trabajo en equipo', short:'Trabajo en equipo', color:'#83b08e', icon:'puente'},
+  critico:      {nombre:'Pensamiento crítico y creativo', short:'Pensamiento crítico', color:'#6ba8bd', icon:'mapa'},
+  trascendencia:{nombre:'Sentido de Trascendencia', short:'Trascendencia', color:'#b083b0', icon:'faro'}
+};
+
+const NIVEL_POR_FUNCION = {ayudante:1, jefeunidad:2, facilitador:3, otra:1};
+const NIVEL_LABEL = {1:'Nivel 1', 2:'Nivel 2', 3:'Nivel 3'};
+const NIVEL_DESC = {
+  1:'Conocimiento y comprensión', 2:'Análisis y aplicación', 3:'Evaluación y diseño'
+};
+
+// Datos fijos: esta herramienta siempre corre para Ayudantes de la Rama Scouts
+// del mismo Grupo, en el mismo período. Solo se pide el nombre en la intro.
+const FUNCION_FIJA = 'ayudante';
+const RAMA_FIJA = 'scouts';
+const FUNCION_LABEL = 'Ayudante de Unidad — Rama Scouts';
+const ORGANISMO_FIJO = 'G.S. San Jorge Mártir N°169 — Unidad Scout Perito Moreno';
+const PERIODO_FIJO = 'Agosto 2026 – Enero 2027';
+
+const ICONS = {
+  brujula:`<circle cx="32" cy="32" r="22"/><path d="M32 12v6M32 46v6M12 32h6M46 32h6"/><path d="M32 32 L40 24 L35 34 Z" fill="currentColor" stroke="none"/><path d="M32 32 L24 40 L29 30 Z" fill="currentColor" stroke="none" opacity="0.45"/>`,
+  llama:`<path d="M32 8c4 8-2 10-2 16 0 4 3 6 3 6-6 2-9-3-9-8 0 0-6 6-6 15 0 10 8 17 18 17s18-7 18-17c0-14-12-18-12-29 0 0-6 2-6 10 0 5 3 7 3 7-4-1-7-4-7-17z" stroke-linejoin="round"/>`,
+  puente:`<path d="M8 42c8-14 40-14 48 0" stroke-linecap="round"/><path d="M16 42V26M48 42V26M32 42V20" stroke-linecap="round"/><path d="M6 46h52" stroke-linecap="round"/>`,
+  mapa:`<path d="M10 14l16-5 16 5 12-4v40l-12 4-16-5-16 5-12-4V10z" stroke-linejoin="round" stroke-linecap="round"/><path d="M26 9v40M42 15v40" stroke-dasharray="1 5" stroke-linecap="round"/><circle cx="34" cy="30" r="2.2" fill="currentColor" stroke="none"/>`,
+  faro:`<path d="M26 58h12M22 58l4-38h12l4 38z" stroke-linejoin="round"/><path d="M28 20h8M27 28h10M26 36h12"/><path d="M32 4v8M20 12l5 5M44 12l-5 5" stroke-linecap="round"/><path d="M8 20c4 2 4 4 0 6M56 20c-4 2-4 4 0 6" stroke-linecap="round" opacity="0.6"/>`,
+  buho:`<circle cx="32" cy="34" r="20"/><circle cx="24" cy="30" r="5"/><circle cx="40" cy="30" r="5"/><circle cx="24" cy="30" r="1.6" fill="currentColor" stroke="none"/><circle cx="40" cy="30" r="1.6" fill="currentColor" stroke="none"/><path d="M30 38l2 3 2-3M18 18l6 6M46 18l-6 6" stroke-linecap="round"/>`
+};
+
+/* ================== ARQUETIPOS ================== */
+const ARCHETYPES = {
+  adapt:{nombre:'La Brújula', icon:'brujula',
+    desc:'Cuando el plan se cae o cambia el viento, sos quien reorienta a la unidad sin perder el norte. Improvisás con criterio.'},
+  cultura:{nombre:'Guardián de la Llama', icon:'llama',
+    desc:'Sostenés el porqué de lo que hacemos. Tu coherencia con la Ley y la Promesa mantiene viva la cultura del Grupo, incluso cuando nadie mira.'},
+  equipo:{nombre:'El Puente', icon:'puente',
+    desc:'Tu don es conectar personas: sumás a los nuevos, repartís el crédito y hacés que el equipo sea equipo, no una suma de solistas.'},
+  critico:{nombre:'El Cartógrafo', icon:'mapa',
+    desc:'No te quedás con la primera respuesta. Leés cada situación con precisión y trazás caminos nuevos donde otros ven callejón.'},
+  trascendencia:{nombre:'El Farero', icon:'faro',
+    desc:'Cuidás el sentido profundo de lo que hacemos, más allá de la actividad del sábado. Tu luz guía aunque no se note.'}
+};
+
+/* ================== ESCENARIOS ==================
+   Cada opción tiene weights: {comp: nivelAlcanzado(0..3)}
+   Sin respuestas "obvias": todas plausibles, revelan nivel distinto.
+================== */
+
+// Bloque situacional (aplica a toda función; el análisis pondera por nivel objetivo)
+const SCENARIOS = [
+  {
+    scene:'Sábado de reunión',
+    title:'Llegás a la reunión y falta la mitad del material que habías planeado. Los chicos ya están ahí, mirándote.',
+    sub:'¿Qué es lo primero que hacés?',
+    options:[
+      {t:'Improviso una actividad con lo que hay y sigo como si nada — después veo.', w:{adapt:1}},
+      {t:'Cambio el plan sobre la marcha, pero manteniendo el objetivo educativo que tenía para hoy.', w:{adapt:2}},
+      {t:'Convierto el imprevisto en la actividad: que los chicos resuelvan cómo seguir con lo que hay.', w:{adapt:3, equipo:2}},
+      {t:'Me trabo un poco y pido ayuda a otro educador para rearmar rápido.', w:{adapt:0, equipo:1}}
+    ]
+  },
+  {
+    scene:'El nuevo del equipo',
+    title:'Se suma un educador nuevo a tu unidad. Tímido, no conoce a nadie, no habla en la reunión de equipo.',
+    sub:'Tu movida natural:',
+    options:[
+      {t:'Le doy tiempo, ya se va a soltar solo cuando agarre confianza.', w:{equipo:0}},
+      {t:'Le asigno una tarea chica y concreta para que tenga un lugar desde el día uno.', w:{equipo:1}},
+      {t:'Lo presento, le doy crédito frente al resto y me aseguro de que lo escuchen.', w:{equipo:2}},
+      {t:'Armo con el equipo un espacio para que aporte y ayudo a que se conecte con los demás.', w:{equipo:3}}
+    ]
+  },
+  {
+    scene:'La discusión en el mástil',
+    title:'Dos educadores de tu unidad discuten fuerte sobre cómo encarar el campamento. Ninguno afloja.',
+    sub:'¿Cómo intervenís?',
+    options:[
+      {t:'Los dejo que lo resuelvan entre ellos, no me quiero meter.', w:{equipo:0, critico:0}},
+      {t:'Propongo una solución intermedia rápida para bajar la tensión.', w:{equipo:1, critico:1}},
+      {t:'Escucho a los dos, busco qué hay de válido en cada postura y armo un acuerdo con lo mejor de ambas.', w:{critico:2, equipo:2}},
+      {t:'Uso la discusión para que el equipo revise cómo tomamos decisiones, no solo este caso.', w:{critico:3, equipo:3}}
+    ]
+  },
+  {
+    scene:'Café después de la reunión',
+    title:'Un padre te cruza y te dice, medio irónico: "¿Y esto de scout no es todo jugar? ¿Qué aprende mi hijo?".',
+    sub:'Tu respuesta sale de:',
+    options:[
+      {t:'Le explico las actividades concretas que hacemos y para qué sirven.', w:{cultura:1}},
+      {t:'Le cuento cómo cada juego trabaja valores de la Ley y la Promesa, con ejemplos de su hijo.', w:{cultura:2, trascendencia:1}},
+      {t:'Lo invito a ver una actividad y a charlar sobre qué esperamos construir en los chicos a largo plazo.', w:{cultura:3, trascendencia:2}},
+      {t:'Me pongo un poco a la defensiva, no sé bien cómo explicarlo en el momento.', w:{cultura:0}}
+    ]
+  },
+  {
+    scene:'El chico que se apaga',
+    title:'Un chico que venía entusiasmado empezó a venir apagado, sin ganas, disperso. Nadie más lo notó.',
+    sub:'¿Qué hacés con eso?',
+    options:[
+      {t:'Lo tengo en el radar, si sigue así en unas semanas veo.', w:{critico:0, trascendencia:0}},
+      {t:'Lo charlo con el Jefe/a de Unidad para pensarlo juntos.', w:{equipo:1, trascendencia:1}},
+      {t:'Me acerco con cuidado, indago sin invadir y ajusto cómo lo acompaño en su progresión.', w:{trascendencia:2, critico:2}},
+      {t:'Leo la situación completa —familia, grupo, momento— y adapto el seguimiento, avisando según protocolo si hace falta.', w:{trascendencia:3, critico:3}}
+    ]
+  },
+  {
+    scene:'Planificación anual',
+    title:'Toca planificar el ciclo. El equipo quiere repetir lo del año pasado porque "funcionó".',
+    sub:'Tu posición:',
+    options:[
+      {t:'Repetir está bien, para qué cambiar algo que anduvo.', w:{critico:0, adapt:0}},
+      {t:'Repito la estructura pero cambio algunos detalles para que no sea igual.', w:{adapt:1, critico:1}},
+      {t:'Reviso qué funcionó y qué no, con datos de la evaluación, y propongo ajustes concretos.', w:{critico:2, adapt:2}},
+      {t:'Uso lo del año pasado como base para diseñar algo que responda a este grupo, que es otro.', w:{critico:3, adapt:3}}
+    ]
+  },
+  {
+    scene:'La duda de un compañero',
+    title:'Un educador nuevo te pregunta por qué en el Grupo se hace cierta cosa "de tal manera y no de otra". No sabés la respuesta exacta.',
+    sub:'¿Qué hacés?',
+    options:[
+      {t:'Le digo que siempre se hizo así y listo, ya se va a acostumbrar.', w:{cultura:0}},
+      {t:'Le respondo lo que creo y sigo, no le doy mucha vuelta.', w:{cultura:1}},
+      {t:'Le digo que averiguo bien y busco la respuesta en los canales o documentos que corresponden.', w:{cultura:2, critico:2}},
+      {t:'Aprovecho para explicarle el porqué de fondo, ligado a los valores y al método, no solo la regla.', w:{cultura:3, trascendencia:2}}
+    ]
+  },
+  {
+    scene:'Cierre de campamento',
+    title:'Terminó una ceremonia de campamento que movilizó a los chicos: hubo emoción, algunos quedaron pensativos.',
+    sub:'Tenés 10 minutos antes de que lleguen los padres. Para vos, ese rato es para:',
+    options:[
+      {t:'Ordenar el material y cerrar, ya está, salió lindo.', w:{trascendencia:0}},
+      {t:'Un cierre corto donde cada uno diga qué se lleva.', w:{trascendencia:1}},
+      {t:'Un momento de recupero que conecte lo que vivieron con los valores del scoutismo.', w:{trascendencia:2}},
+      {t:'Una reflexión donde ellos mismos le pongan palabras a lo que sintieron y descubran su sentido.', w:{trascendencia:3, critico:2}}
+    ]
+  },
+  {
+    scene:'Te equivocaste',
+    title:'Tomaste una decisión en una salida que salió mal. Un chico la pasó feo por eso.',
+    sub:'Después, en frío:',
+    options:[
+      {t:'Fue mala suerte, esas cosas pasan en las salidas.', w:{critico:0, adapt:0}},
+      {t:'Me quedo mal un tiempo pero sigo, no le doy más vueltas.', w:{critico:1}},
+      {t:'Reviso qué haría distinto y lo comparto con el equipo para que aprendamos.', w:{critico:2, equipo:2, adapt:2}},
+      {t:'Analizo la raíz de la decisión, ajusto mi criterio y propongo un cambio en cómo planeamos salidas.', w:{critico:3, adapt:3}}
+    ]
+  },
+  {
+    scene:'Elegir batalla',
+    title:'Es época de sobrecarga: laburo, estudio, y el Grupo te pide cada vez más.',
+    sub:'¿Cómo lo manejás?',
+    options:[
+      {t:'Digo que sí a todo y después veo cómo llego, no quiero quedar mal.', w:{equipo:0, adapt:0}},
+      {t:'Bajo mi participación sin avisar mucho, priorizo lo mío.', w:{equipo:0}},
+      {t:'Hablo claro con mi Acompañante sobre mis tiempos reales y acordamos qué asumo.', w:{equipo:2, cultura:2}},
+      {t:'Reviso mi ciclo de vida en el Grupo, propongo una función acorde a mi momento y lo dejo hablado.', w:{cultura:3, critico:2}}
+    ]
+  },
+  {
+    scene:'La actividad que no prende',
+    title:'Preparaste una actividad con todo, y a los diez minutos ves que a los chicos no les interesa nada.',
+    sub:'En vivo, ¿qué hacés?',
+    options:[
+      {t:'La sostengo hasta el final, ya la armé, algo van a sacar.', w:{adapt:0}},
+      {t:'La corto y saco un juego de la manga para levantar el clima.', w:{adapt:2}},
+      {t:'Leo qué les está pasando y reencauzo la actividad hacia lo que sí los engancha.', w:{adapt:3, critico:2}},
+      {t:'Les pregunto a ellos qué harían y rearmamos la propuesta juntos.', w:{equipo:3, adapt:2}}
+    ]
+  },
+  {
+    scene:'La familia preocupada',
+    title:'Una mamá te cuenta, en confianza, algo delicado que está pasando en la casa de un chico de la unidad.',
+    sub:'Tu forma de actuar:',
+    options:[
+      {t:'La escucho, la contengo y le digo que se quede tranquila, yo me encargo.', w:{trascendencia:1, critico:0}},
+      {t:'Anoto lo central del relato y lo llevo a quien corresponde según el protocolo.', w:{trascendencia:2, cultura:2}},
+      {t:'Reconozco los elementos clave, hago el registro y activo el protocolo de protección con la persona indicada del Grupo.', w:{trascendencia:3, cultura:3}},
+      {t:'Me abruma un poco, no estoy seguro de qué corresponde hacer.', w:{trascendencia:0, cultura:0}}
+    ]
+  },
+  {
+    scene:'Consejo de Grupo',
+    title:'En el Consejo se toma una decisión con la que no estás de acuerdo, pero la mayoría la votó.',
+    sub:'¿Cómo seguís?',
+    options:[
+      {t:'La aplico a regañadientes, aunque por dentro sigo en contra.', w:{cultura:1}},
+      {t:'Respeto la decisión democrática y la llevo adelante con lealtad.', w:{cultura:2, equipo:2}},
+      {t:'La banco, y busco el momento para seguir aportando mi mirada de forma constructiva.', w:{cultura:3, critico:2}},
+      {t:'Me cuesta acatar cuando estoy convencido de lo contrario.', w:{cultura:0}}
+    ]
+  },
+  {
+    scene:'El chico difícil',
+    title:'Hay un chico que desafía todo el tiempo, corta las actividades, cansa al grupo.',
+    sub:'Tu lectura de la situación:',
+    options:[
+      {t:'Necesita límites más firmes, hay que ponerle el freno.', w:{critico:0}},
+      {t:'Le doy tareas de responsabilidad para canalizar esa energía.', w:{critico:2, adapt:2}},
+      {t:'Busco qué hay detrás de esa conducta antes de responder al síntoma.', w:{critico:3, trascendencia:2}},
+      {t:'Lo hablo con el equipo para tener una mirada compartida sobre cómo acompañarlo.', w:{equipo:2, critico:2}}
+    ]
+  },
+  {
+    scene:'Delegar o hacer',
+    title:'Hay una tarea importante para el campamento. La harías más rápido y mejor vos solo/a.',
+    sub:'¿Qué elegís?',
+    options:[
+      {t:'La hago yo, así queda bien y a tiempo.', w:{equipo:0}},
+      {t:'La hago yo esta vez, pero muestro cómo para la próxima.', w:{equipo:1}},
+      {t:'La delego en alguien que puede, aunque tarde más, y lo acompaño.', w:{equipo:3}},
+      {t:'La reparto entre varios según lo que cada uno hace mejor.', w:{equipo:3, critico:2}}
+    ]
+  },
+  {
+    scene:'La progresión de un chico',
+    title:'Un chico de tu pequeño grupo hace meses que no avanza en su progresión personal. Se quedó ahí.',
+    sub:'¿Qué hacés?',
+    options:[
+      {t:'Cada uno tiene su ritmo, ya va a arrancar cuando esté listo.', w:{trascendencia:0}},
+      {t:'Lo motivo de a poco para que retome, sin presionarlo.', w:{trascendencia:1}},
+      {t:'Me siento con él a ver qué lo frenó y armamos juntos un próximo paso concreto.', w:{trascendencia:2, critico:2}},
+      {t:'Reviso su recorrido completo, lo coordino con el Jefe/a de Unidad y ajusto cómo lo acompaño.', w:{trascendencia:3, equipo:2}}
+    ]
+  },
+  {
+    scene:'Antes de una salida',
+    title:'Estás por salir de excursión con la unidad. Alguien pregunta si llevaste el botiquín y revisaste los riesgos del lugar.',
+    sub:'La verdad es que:',
+    options:[
+      {t:'No lo tenía tan presente, confío en que no va a pasar nada.', w:{trascendencia:0, critico:0}},
+      {t:'Llevo el botiquín pero no chequeé bien el lugar de antemano.', w:{trascendencia:1}},
+      {t:'Reviso el botiquín y pienso los riesgos principales antes de salir.', w:{trascendencia:2, critico:2}},
+      {t:'Tengo un checklist de seguridad que repaso siempre: botiquín, riesgos del terreno, contactos.', w:{trascendencia:3, critico:3}}
+    ]
+  },
+  {
+    scene:'La idea de un chico',
+    title:'En una reunión, un chico propone una actividad medio delirante para el próximo sábado. Al resto le copa.',
+    sub:'Tu reacción:',
+    options:[
+      {t:'Le explico por qué no se puede y propongo algo más realista.', w:{adapt:0, equipo:0}},
+      {t:'La escucho pero termino inclinando la balanza hacia lo que yo tenía pensado.', w:{adapt:1}},
+      {t:'Tomo su idea y la ayudo a que sea viable sin apagarle el entusiasmo.', w:{adapt:2, equipo:2}},
+      {t:'Uso su propuesta para que ellos mismos la planifiquen y se hagan cargo.', w:{equipo:3, adapt:2}}
+    ]
+  },
+  {
+    scene:'Dos formas de ver',
+    title:'Vos y otro educador tienen miradas muy distintas sobre cómo educar. Chocan seguido, aunque se respetan.',
+    sub:'¿Cómo lo llevás?',
+    options:[
+      {t:'Trato de convencerlo de que mi forma es la que funciona.', w:{critico:0, equipo:0}},
+      {t:'Cada uno hace lo suyo y evitamos pisarnos.', w:{equipo:1}},
+      {t:'Busco lo que su mirada tiene de valioso y lo sumo a la mía.', w:{critico:3, equipo:2}},
+      {t:'Aprovechamos las dos miradas como una fortaleza del equipo frente a los chicos.', w:{equipo:3, critico:3}}
+    ]
+  },
+  {
+    scene:'El sábado difícil',
+    title:'Venís de una semana pesada, sin ganas, y encima el sábado la reunión se descontrola: gritos, desorden, nada sale.',
+    sub:'Adentro tuyo:',
+    options:[
+      {t:'Me frustro y termino la reunión como puedo, pensando que no sirvo para esto.', w:{adapt:0, trascendencia:0}},
+      {t:'La saco adelante a pulmón aunque me cueste, y me olvido el lunes.', w:{adapt:1}},
+      {t:'Bajo un cambio, priorizo lo importante y suelto lo que no se puede hoy.', w:{adapt:2, critico:2}},
+      {t:'Lo tomo como parte del camino, lo charlo con el equipo y saco un aprendizaje.', w:{adapt:3, equipo:2}}
+    ]
+  },
+  {
+    scene:'Las familias en el grupo',
+    title:'Notás que las familias de tu unidad casi no se conocen entre sí ni participan de lo que hacemos.',
+    sub:'¿Qué hacés al respecto?',
+    options:[
+      {t:'Las familias vienen a dejar a los chicos, no hace falta más que eso.', w:{cultura:0, equipo:0}},
+      {t:'Las saludo y las tengo al tanto, pero no busco que se involucren más.', w:{equipo:1}},
+      {t:'Propongo una actividad puntual para que las familias se sumen y se conozcan.', w:{equipo:2, adapt:2}},
+      {t:'Diseño con el equipo formas de involucrarlas de fondo en la vida de la unidad.', w:{equipo:3, critico:2}}
+    ]
+  },
+  {
+    scene:'Dos chicos, un lugar',
+    title:'Dos chicos quieren el mismo rol de responsabilidad en la patrulla y los dos lo merecen. Solo hay un lugar.',
+    sub:'Ninguna respuesta es la única correcta. ¿Cómo lo encarás?',
+    options:[
+      {t:'Elijo yo al que veo más capaz y se lo explico a los dos.', w:{critico:1, trascendencia:1}},
+      {t:'Que lo definan ellos entre la patrulla, de forma democrática.', w:{equipo:2, cultura:2}},
+      {t:'Busco desdoblar el rol o crear otro para que los dos crezcan.', w:{critico:3, adapt:2}},
+      {t:'Uso la situación para que aprendan a negociar y ceder entre ellos.', w:{trascendencia:3, equipo:2}}
+    ]
+  },
+  {
+    scene:'El termómetro de la reunión',
+    title:'A mitad de la reunión sentís que el clima está raro: no hay conflicto, pero algo no fluye.',
+    sub:'Todas son formas válidas de reaccionar. ¿Cuál es la tuya?',
+    options:[
+      {t:'Sigo con lo planeado, capaz se acomoda solo más adelante.', w:{adapt:0}},
+      {t:'Meto un juego con energía para levantar el ánimo.', w:{adapt:2}},
+      {t:'Freno y les pregunto directamente cómo la están pasando.', w:{trascendencia:3, equipo:2}},
+      {t:'Observo un rato más para entender qué lo genera antes de actuar.', w:{critico:3}}
+    ]
+  },
+  {
+    scene:'Lo urgente y lo importante',
+    title:'Falta una semana para el campamento y no llegás con todo. Tenés que resignar algo.',
+    sub:'Las cuatro son decisiones legítimas. ¿Qué resignás?',
+    options:[
+      {t:'La parte educativa, total en el campamento se aprende igual jugando.', w:{trascendencia:0, critico:0}},
+      {t:'Algo de la logística fina, me arreglo sobre la marcha.', w:{adapt:2}},
+      {t:'Reparto lo que falta con el equipo para no resignar nada clave.', w:{equipo:3}},
+      {t:'Reviso qué es imprescindible de verdad y suelto el resto sin culpa.', w:{critico:3, adapt:2}}
+    ]
+  },
+  {
+    scene:'La crítica de un colega',
+    title:'Otro educador te dice, delante del equipo, que una actividad tuya no estuvo buena.',
+    sub:'No hay una reacción correcta. ¿Qué te sale?',
+    options:[
+      {t:'Me defiendo en el momento, no me pareció justo cómo lo dijo.', w:{critico:0, equipo:0}},
+      {t:'Lo escucho, me lo guardo y lo pienso después en frío.', w:{critico:2}},
+      {t:'Le pido que me dé ejemplos concretos para entender qué mejorar.', w:{critico:3, equipo:2}},
+      {t:'Agradezco la devolución ahí mismo y propongo charlarlo bien después.', w:{equipo:3, cultura:2}}
+    ]
+  },
+  {
+    scene:'El silencio de un chico',
+    title:'En una ronda de cierre, un chico dice "todo bien" pero se nota que no está bien.',
+    sub:'Cualquiera de estas es defendible. ¿Qué priorizás?',
+    options:[
+      {t:'Respeto que no quiera hablar, ya se acercará si lo necesita.', w:{trascendencia:1}},
+      {t:'Lo busco después, a solas, para que no se sienta expuesto.', w:{trascendencia:3, critico:2}},
+      {t:'Genero confianza en el grupo para que se anime a abrirse.', w:{equipo:2, trascendencia:2}},
+      {t:'Aviso a quien corresponda si intuyo que puede ser algo serio.', w:{cultura:3, trascendencia:2}}
+    ]
+  }
+];
+
+/* ================== PREGUNTAS LATERALES ==================
+   No parecen "de scout" pero mapean a competencias.
+================== */
+const LATERALS = [
+  {
+    scene:'Fuera de la carpa',
+    title:'Estás armando un mueble sin instrucciones. A mitad de camino ves que arrancaste mal.',
+    sub:'Vos, honestamente:',
+    options:[
+      {t:'Sigo igual, total ya está, algo va a quedar.', w:{critico:0, adapt:0}},
+      {t:'Desarmo la parte justa y la rehago, aunque me dé bronca.', w:{critico:2, adapt:2}},
+      {t:'Paro, entiendo por qué salió mal y recién ahí sigo con un método.', w:{critico:3}},
+      {t:'Busco a alguien que sepa y lo hacemos entre los dos.', w:{equipo:2}}
+    ]
+  },
+  {
+    scene:'El grupo de cocina',
+    title:'Cocinás para un grupo grande y de golpe se suman cuatro personas que no esperabas. La comida no alcanza para todos.',
+    sub:'Tu reacción:',
+    options:[
+      {t:'Me estreso, ya estaba todo calculado, no sé de dónde saco más.', w:{adapt:0}},
+      {t:'Estiro lo que hay como puedo y que sea lo que sea.', w:{adapt:1}},
+      {t:'Rearmo el menú al toque con lo que tengo a mano para que rinda.', w:{adapt:3, critico:2}},
+      {t:'Organizo a un par para que me den una mano y lo resolvemos entre todos.', w:{equipo:3, adapt:2}}
+    ]
+  },
+  {
+    scene:'La mochila',
+    title:'Preparás tu mochila para una travesía larga. ¿Cómo decidís qué entra y qué queda afuera?',
+    sub:'',
+    options:[
+      {t:'Llevo de más por las dudas, prefiero que sobre y no que falte.', w:{critico:0}},
+      {t:'Solo lo esencial y ya probado, nada que no haya usado antes.', w:{cultura:2}},
+      {t:'Pienso el recorrido tramo por tramo y llevo lo que cada parte va a pedir.', w:{critico:3, adapt:2}},
+      {t:'Reviso el pronóstico, el peso y el terreno, y armo una lista pensada para este viaje puntual.', w:{critico:3, adapt:3}}
+    ]
+  },
+  {
+    scene:'Silencio incómodo',
+    title:'En una charla, alguien dice algo con lo que estás en total desacuerdo. El resto asiente.',
+    sub:'¿Qué hacés?',
+    options:[
+      {t:'Me callo, no vale la pena discutir contra todos.', w:{critico:0}},
+      {t:'Digo lo mío aunque incomode, pero con respeto.', w:{critico:2}},
+      {t:'Pregunto para entender por qué piensan así antes de opinar.', w:{critico:3, equipo:2}},
+      {t:'Espero el momento y lo hablo aparte con quien lo dijo.', w:{equipo:1, critico:1}}
+    ]
+  },
+  {
+    scene:'El mapa y la brújula',
+    title:'Vas perdido en el monte con el grupo cansado. Hay dos caminos: uno corto pero difícil, y uno largo pero seguro.',
+    sub:'¿Cómo lo resolvés?',
+    options:[
+      {t:'Elijo el corto para llegar rápido y sostengo mi decisión.', w:{adapt:1, critico:0}},
+      {t:'Elijo el largo, la seguridad va primero y no lo discuto.', w:{cultura:2, trascendencia:1}},
+      {t:'Miro cómo está realmente el grupo y decido en base a eso.', w:{critico:2, trascendencia:2}},
+      {t:'Pongo la info sobre la mesa, lo decidimos juntos y acompaño lo que salga.', w:{equipo:3, critico:2}}
+    ]
+  },
+  {
+    scene:'Lo que más te llena',
+    title:'De todo lo que hacés como educador/a, ¿qué es lo que más te llena?',
+    sub:'',
+    options:[
+      {t:'Ver que una actividad salió redonda y todos la disfrutaron.', w:{adapt:2}},
+      {t:'Que el equipo de adultos funcione y la pasemos bien juntos.', w:{equipo:3}},
+      {t:'Ver a un chico entender algo que lo transforma por dentro.', w:{trascendencia:3}},
+      {t:'Resolver un problema complicado con una idea que a nadie se le había ocurrido.', w:{critico:3}}
+    ]
+  },
+  {
+    scene:'Herencia',
+    title:'Dentro de diez años, un chico de tu unidad se acuerda de vos. ¿Por qué querés que sea?',
+    sub:'',
+    options:[
+      {t:'Porque siempre había una actividad copada y nunca nos aburrimos.', w:{adapt:2}},
+      {t:'Porque hice que el grupo fuera una segunda familia.', w:{equipo:3, cultura:2}},
+      {t:'Porque le mostré una forma de pararse en la vida.', w:{trascendencia:3}},
+      {t:'Porque le enseñé a pensar por sí mismo y a no tragarse todo.', w:{critico:3}}
+    ]
+  },
+  {
+    scene:'El nudo que no sale',
+    title:'Tenés que hacer un nudo que no te sale y lo necesitás ya. Nadie mira.',
+    sub:'Vos:',
+    options:[
+      {t:'Improviso algo que más o menos aguante y sigo.', w:{critico:0}},
+      {t:'Insisto hasta que me salga, aunque pierda tiempo.', w:{critico:1, cultura:1}},
+      {t:'Busco cómo se hace bien y lo aprendo de una para no depender de la suerte.', w:{critico:3}},
+      {t:'Le pido a alguien que sepa y de paso me lo enseña.', w:{equipo:2, critico:1}}
+    ]
+  },
+  {
+    scene:'La fogata',
+    title:'Es de noche, la fogata está por empezar y vos tenés que dar unas palabras al grupo.',
+    sub:'Lo que te sale naturalmente es hablar de:',
+    options:[
+      {t:'Lo bien que la pasamos y lo que hicimos en el día.', w:{adapt:2}},
+      {t:'Lo lindo que es estar todos juntos como grupo.', w:{equipo:3}},
+      {t:'Algo más profundo: quiénes queremos ser, hacia dónde vamos.', w:{trascendencia:3}},
+      {t:'Una pregunta que los deje pensando, sin darles la respuesta.', w:{critico:3, trascendencia:2}}
+    ]
+  }
+];
+
+/* ================== INDICADORES (para plan) ================== */
+const CLUSTERS = [
+  {id:'cuidado', nombre:'Cuidado y protección', ref:'Indicadores comunes 1–9, 24–25',
+   text1:'Identifico riesgos físicos y emocionales en la unidad, sé actuar según protocolo ante una vulneración de derechos, y manejo primeros auxilios básicos y el botiquín.', trigger:['trascendencia','critico']},
+  {id:'programa', nombre:'Programa de Jóvenes y participación democrática', ref:'Indicadores comunes 10–16, 18–20',
+   text1:'Animo instancias democráticas, participo en el diagnóstico y evaluación de actividades, y aplico el Marco Simbólico (cuentos, ceremonias, danzas) en la unidad.', trigger:['adapt','equipo']},
+  {id:'progresion', nombre:'Progresión personal', ref:'Indicador común 17',
+   text1:'Acompaño el seguimiento de la progresión personal de mi pequeño grupo, con la coordinación del Jefe/a de Unidad.',
+   text2:'Garantizo que cada chico/a de la unidad tenga su seguimiento de progresión y coordino ese proceso con el equipo.', trigger:['trascendencia']},
+  {id:'airelibre', nombre:'Vida al aire libre y campamentos', ref:'Indicadores comunes 21–23',
+   text1:'Participo en la planificación y conducción de campamentos, aplico técnicas de vida al aire libre y promuevo hábitos saludables.', trigger:['adapt']},
+  {id:'equipoconsejo', nombre:'Equipo de Educadores y Consejo', ref:'Indicadores comunes 27, 29–30',
+   text1:'Participo activamente en las reuniones de mi Unidad junto al Equipo, y colaboro para resolver conflictos entre los chicos/as.',
+   text2:'Coordino al Equipo de Educadores, participo en el Consejo de Grupo y resuelvo conflictos dentro del equipo de adultos.', trigger:['equipo']},
+  {id:'digital', nombre:'Herramientas digitales y formación', ref:'Indicadores comunes 28, 32–33',
+   text1:'Conozco y uso la biblioteca web de Scouts de Argentina, uso al menos una herramienta digital para el aprendizaje, y ya elaboré un Plan de Desempeño con mi Acompañante.', trigger:['critico']}
+];
+
+const RAMA_ITEMS = {
+  castores:[
+    {id:'cast1', text:'Genero un ambiente confiable donde compartir es la base, y acompaño el juego libre con imaginación y disfraces.', ref:'Específicos Castores 1–3'},
+    {id:'cast2', text:'Aplico técnicas de bajo impacto ambiental según la edad y hago seguimiento de al menos 3 Castores.', ref:'Específicos Castores 4–6'}
+  ],
+  lobatos:[
+    {id:'lob1', text:'Uso El Libro de las Tierras Vírgenes como referencia del Marco Simbólico, narro cuentos y escucho con paciencia.', ref:'Específicos Lobatos 1–4'},
+    {id:'lob2', text:'Los hago protagonistas, genero el hábito del servicio y los involucro en los órganos de gobierno de la unidad.', ref:'Específicos Lobatos 5, 7–10'},
+    {id:'lob3', text:'Hago seguimiento personal de al menos 3 Lobatos/Lobeznas.', ref:'Específicos Lobatos 11–12'}
+  ],
+  scouts:[
+    {id:'sc1', text:'Fomento que las Patrullas desarrollen autonomía y liderazgo situacional, y genero el hábito de "la buena acción".', ref:'Específicos Scouts 1–4, 6'},
+    {id:'sc2', text:'Hago seguimiento personal de al menos 3 Scouts.', ref:'Específicos Scouts 5, 7'}
+  ],
+  caminantes:[
+    {id:'cam1', text:'Acompaño la Hoja de Marcha y la Carta de Marcha, y motivo el proceso de las Empresas.', ref:'Específicos Caminantes 1–3'},
+    {id:'cam2', text:'Organizo o acompaño Rallies y Raids, y garantizo que elijan y capaciten a su representante.', ref:'Específicos Caminantes 4–7'},
+    {id:'cam3', text:'Hago seguimiento personal de al menos 3 Caminantes.', ref:'Específicos Caminantes 12'}
+  ],
+  rovers:[
+    {id:'rov1', text:'Acompaño el Plan Personal de Acción (PPA) y motivo la Carta de Comunidad.', ref:'Específicos Rovers 1–3'},
+    {id:'rov2', text:'Acompaño Partidas y Campamentos en Soledad, y hago seguimiento de al menos 3 Rovers.', ref:'Específicos Rovers 4–5, 8'}
+  ]
+};
+
+/* ================== POSTAS ILUSTRADAS DE PRIORIDAD ==================
+   No miden nivel (no hay correcto/incorrecto): solo revelan hacia dónde
+   se inclina la persona cuando tiene que elegir rápido. Alimentan el
+   arquetipo, no el radar ni el plan de logrado/a desarrollar.
+================== */
+const PRIORITY_QUESTIONS = [
+  {
+    scene:'Prioridad · sin apuro, elegí con calma',
+    title:'Se largó una tormenta fuerte y el campamento es un caos. Tenés los primeros cinco minutos para reaccionar.',
+    sub:'¿Qué priorizás primero? No hay una respuesta correcta.',
+    illustration:`<svg viewBox="0 0 400 140" fill="none">
+      <path d="M18 30l6 10M40 22l6 12M64 28l6 10M300 24l6 11M326 30l6 10M352 24l6 11" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+      <path d="M150 118 L185 45 L220 118 Z" stroke="var(--ember)" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M185 45v73M165 118l20-38 20 38" stroke="var(--ember)" stroke-width="1.6" opacity="0.6"/>
+      <path d="M100 20c14-8 26 6 14 14M280 18c-12-9-26 4-15 14" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/>
+      <path d="M40 118h320" stroke="var(--line-strong)" stroke-width="1.5"/>
+      <path d="M90 60l4 12M105 55l4 13M270 58l4 12M255 52l4 13" stroke="var(--sky)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    </svg>`,
+    options:[
+      {t:'Reunir y contar a todos los chicos, que nadie quede afuera.', icon:'faro', w:{trascendencia:3}},
+      {t:'Mantener la calma del grupo, con humor si hace falta.', icon:'puente', w:{equipo:3}},
+      {t:'Buscar refugio ya y salvar lo que se pueda del campamento.', icon:'brujula', w:{adapt:3}},
+      {t:'Pararme un segundo, evaluar riesgos y armar un plan de acción.', icon:'mapa', w:{critico:3}}
+    ]
+  },
+  {
+    scene:'Prioridad · elegí con calma',
+    title:'Se corta la luz de golpe en medio de la velada nocturna con toda la unidad reunida.',
+    sub:'Las cuatro son válidas. ¿Qué priorizás primero?',
+    illustration:`<svg viewBox="0 0 400 140" fill="none">
+      <circle cx="80" cy="70" r="2" fill="var(--gold)" opacity="0.5"/>
+      <circle cx="130" cy="35" r="1.6" fill="var(--gold)" opacity="0.4"/>
+      <circle cx="60" cy="30" r="1.6" fill="var(--gold)" opacity="0.4"/>
+      <circle cx="320" cy="40" r="1.8" fill="var(--gold)" opacity="0.45"/>
+      <circle cx="350" cy="75" r="1.6" fill="var(--gold)" opacity="0.4"/>
+      <circle cx="290" cy="90" r="2" fill="var(--gold)" opacity="0.4"/>
+      <circle cx="200" cy="55" r="28" stroke="var(--ink-faint)" stroke-width="2" opacity="0.55"/>
+      <path d="M188 32c-4 8-4 16 0 22M212 32c4 8 4 16 0 22M192 40l16 8M208 40l-16 8" stroke="var(--ink-faint)" stroke-width="1.6" opacity="0.55"/>
+      <path d="M188 83h24v9a4 4 0 01-4 4h-16a4 4 0 01-4-4z" stroke="var(--ink-faint)" stroke-width="2" opacity="0.55"/>
+      <path d="M192 96h16" stroke="var(--ink-faint)" stroke-width="1.6" opacity="0.55"/>
+      <path d="M150 20L172 44" stroke="var(--ember)" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M172 20L150 44" stroke="var(--ember)" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M228 44l14-10 4 8 12-9" stroke="var(--sage)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+    </svg>`,
+    options:[
+      {t:'Buscar velas o linternas ya, para que la actividad siga como estaba planeada.', icon:'brujula', w:{adapt:3}},
+      {t:'Aprovechar la oscuridad: es un lindo momento para profundizar la charla.', icon:'faro', w:{trascendencia:3}},
+      {t:'Cantar o jugar algo para que el grupo no se ponga nervioso.', icon:'puente', w:{equipo:3}},
+      {t:'Seguir el protocolo de emergencia tal como está establecido, sin improvisar.', icon:'llama', w:{cultura:3}}
+    ]
+  },
+  {
+    scene:'Prioridad · elegí con calma',
+    title:'Varios quilombos chicos pasan a la vez en la unidad: un chico llorando, dos peleados, y falta media hora de planificación sin cerrar.',
+    sub:'¿A qué le entrás primero?',
+    illustration:`<svg viewBox="0 0 400 140" fill="none">
+      <rect x="60" y="30" width="46" height="34" rx="3" stroke="var(--gold)" stroke-width="2" transform="rotate(-8 83 47)"/>
+      <path d="M60 30l46 34M106 30l-46 34" stroke="var(--gold)" stroke-width="1.2" opacity="0.4" transform="rotate(-8 83 47)"/>
+      <circle cx="200" cy="45" r="15" stroke="var(--ember)" stroke-width="2" transform="rotate(15 200 45)"/>
+      <path d="M200 32v9M200 54v3M188 45h9M203 45h9" stroke="var(--ember)" stroke-width="1.5" transform="rotate(15 200 45)"/>
+      <path d="M280 30q20 10 0 25t0 25" stroke="var(--sage)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M330 60l14-14M330 46l14 14M310 40l16 4" stroke="var(--sky)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M40 110h320" stroke="var(--line-strong)" stroke-width="1.5"/>
+    </svg>`,
+    options:[
+      {t:'Pararme un segundo, ordenar prioridades con la cabeza fría.', icon:'mapa', w:{critico:3}},
+      {t:'Juntar al equipo y repartir quién resuelve qué, ya.', icon:'puente', w:{equipo:3}},
+      {t:'Ir primero al chico que está mal — lo demás puede esperar un poco.', icon:'faro', w:{trascendencia:3}},
+      {t:'Resolver lo más urgente al toque, aunque no sea lo más importante.', icon:'brujula', w:{adapt:3}}
+    ]
+  },
+  {
+    scene:'Prioridad · elegí con calma',
+    title:'Si tuvieras que elegir una sola imagen para resumir el año de tu unidad, ¿cuál sería?',
+    sub:'No hay una mejor que otra — elegí la que más te representa.',
+    illustration:`<svg viewBox="0 0 400 140" fill="none">
+      <rect x="130" y="18" width="140" height="100" rx="4" stroke="var(--line-strong)" stroke-width="2"/>
+      <path d="M170 95l14-22 12 14 16-26 20 34" stroke="var(--ember)" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="160" cy="45" r="8" stroke="var(--gold)" stroke-width="2"/>
+      <path d="M150 100h100" stroke="var(--line)" stroke-width="1.2"/>
+    </svg>`,
+    options:[
+      {t:'Todos juntos alrededor del fogón, sin nada más.', icon:'puente', w:{equipo:3}},
+      {t:'La bandera flameando en una ceremonia.', icon:'llama', w:{cultura:3}},
+      {t:'Un chico mirando el horizonte, pensativo.', icon:'faro', w:{trascendencia:3}},
+      {t:'El pizarrón lleno de ideas de una planificación.', icon:'mapa', w:{critico:3}}
+    ]
+  }
+];
+
+/* ================== STATE ================== */
+let userData = {};
+let questions = [];
+let answers = {};       // index -> chosen option object
+let currentIndex = 0;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function buildQuestions(){
+  let normales = shuffle(SCENARIOS.map(s=>({...s, type:'scene'})).concat(LATERALS.map(s=>({...s, type:'lateral'}))));
+  let prioridades = shuffle(PRIORITY_QUESTIONS.map(s=>({...s, type:'priority'})));
+
+  const N = normales.length, P = prioridades.length, T = N+P;
+  const gap = T/(P+1);
+
+  // posiciones objetivo equiespaciadas + jitter, con separación mínima
+  // garantizada de 3 preguntas entre cada posta de prioridad.
+  let posiciones = [];
+  for(let i=1;i<=P;i++){
+    const base = Math.round(gap*i);
+    const jitter = Math.floor(Math.random()*3)-1; // -1, 0, +1
+    posiciones.push(Math.max(1, Math.min(T-2, base+jitter)));
+  }
+  posiciones.sort((a,b)=>a-b);
+  for(let i=1;i<posiciones.length;i++){
+    if(posiciones[i]-posiciones[i-1] < 3) posiciones[i] = posiciones[i-1]+3;
+  }
+  posiciones = posiciones.map(p=>Math.min(p, T-1));
+
+  const result = new Array(T);
+  const posSet = new Set(posiciones);
+  let ni=0, pi=0;
+  for(let idx=0; idx<T; idx++){
+    result[idx] = posSet.has(idx) ? prioridades[pi++] : normales[ni++];
+  }
+  return result.map(q=>({...q, options: shuffle(q.options)}));
+}
+
+/* ================== FLOW ================== */
+function startQuiz(){
+  userData.nombre = val('in-nombre') || '(sin nombre)';
+  userData.organismo = ORGANISMO_FIJO;
+  userData.periodo = PERIODO_FIJO;
+  userData.funcion = FUNCION_FIJA;
+  userData.rama = RAMA_FIJA;
+
+  questions = buildQuestions();
+  answers = {};
+  currentIndex = 0;
+
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function val(id){return document.getElementById(id).value.trim();}
+
+function renderQuestion(){
+  const q = questions[currentIndex];
+  const tag = document.getElementById('q-tag');
+  const tagLabel = q.type==='priority' ? 'Posta de prioridad' : (q.type==='lateral' ? 'Pregunta de costado' : 'Escena de unidad');
+  tag.innerHTML = `<span>${tagLabel}</span><span class="chip">${currentIndex+1} / ${questions.length}</span>`;
+  document.getElementById('q-scene').textContent = q.scene || '';
+  document.getElementById('q-title').textContent = q.title;
+  document.getElementById('q-sub').textContent = q.sub || '';
+
+  const illo = document.getElementById('q-illustration');
+  if(q.illustration){ illo.style.display='block'; illo.innerHTML = q.illustration; }
+  else { illo.style.display='none'; illo.innerHTML=''; }
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML = '';
+  q.options.forEach((op,i)=>{
+    const div = document.createElement('div');
+    const sel = answers[currentIndex] && answers[currentIndex]._i===i;
+    div.className = 'opt' + (sel?' selected':'');
+    div.onclick = ()=>{ answers[currentIndex] = {...op, _i:i, _kind:q.type}; renderQuestion(); };
+    const iconHtml = op.icon ? `<span class="opt-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4">${ICONS[op.icon]}</svg></span>` : `<span class="opt-dot"></span>`;
+    div.innerHTML = `${iconHtml}<span class="opt-text">${op.t}</span>`;
+    opts.appendChild(div);
+  });
+
+  document.getElementById('btn-back').disabled = currentIndex===0;
+  document.getElementById('btn-next').disabled = !answers[currentIndex];
+  document.getElementById('btn-next').textContent = (currentIndex===questions.length-1)?'Ver mi retrato →':'Siguiente →';
+
+  const pct = (currentIndex/(questions.length-1))*100;
+  document.getElementById('trail-fill').style.width = pct+'%';
+  document.getElementById('trail-spark').style.left = pct+'%';
+  document.getElementById('trail-label').textContent = `Posta ${currentIndex+1}`;
+}
+
+function nextQuestion(){
+  if(!answers[currentIndex]) return;
+  if(currentIndex<questions.length-1){currentIndex++; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'});}
+  else showResults();
+}
+function prevQuestion(){ if(currentIndex>0){currentIndex--; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'});} }
+
+/* ================== SCORING ================== */
+function computeScores(){
+  // "scores" = nivel real 0..3 por competencia (para radar y plan).
+  const acc = {};
+  Object.keys(COMP).forEach(k=>acc[k]={sum:0,count:0,max:0});
+  Object.values(answers).forEach(ans=>{
+    if(!ans.w || ans._kind==='priority') return; // las postas de prioridad no miden nivel, solo perfil
+    Object.entries(ans.w).forEach(([k,lvl])=>{
+      acc[k].sum += lvl; acc[k].count++; acc[k].max = Math.max(acc[k].max, lvl);
+    });
+  });
+  const scores = {};
+  Object.keys(COMP).forEach(k=>{
+    if(acc[k].count===0){ scores[k]=0; return; }
+    const avg = acc[k].sum/acc[k].count;
+    scores[k] = Math.round(((avg*0.8)+(acc[k].max*0.2))*10)/10;
+  });
+  return scores;
+}
+
+// Clasificación LOGRADO / A DESARROLLAR — dos reglas combinadas:
+//  (A) Umbral absoluto MÁS ALTO (2.1 sobre 3): sube la vara para todos, así no
+//      alcanza con respuestas "correctas" flojas; hay que mostrar solidez real.
+//  (B) Las 1–2 competencias relativamente MÁS DÉBILES de la persona SIEMPRE van
+//      a "a desarrollar", aunque en absoluto estén bien. Esto refleja lo que
+//      hace un buen acompañante: "estás bien en general, pero comparativamente
+//      esto es lo que más te conviene pulir". Garantiza que nadie saque 13/0.
+// El resultado: un novato no sale todo negativo (sus competencias medias pasan),
+// y alguien con experiencia no sale perfecto (siempre se le marca su punto flojo).
+const UMBRAL_LOGRADO = 2.1;
+const FLOOR_LOGRADO = 1.4;
+let __debiles = new Set(); // se completa en computeDebiles(), usado por esLogrado
+
+function computeDebiles(scores){
+  // marca como "débiles" las competencias del cuartil inferior de la persona:
+  // siempre al menos 1, y una 2da si está claramente por debajo del promedio.
+  const entries = Object.entries(scores).sort((a,b)=>a[1]-b[1]); // asc
+  const vals = entries.map(e=>e[1]);
+  const media = vals.reduce((a,b)=>a+b,0)/vals.length;
+  const debiles = new Set();
+  debiles.add(entries[0][0]); // la más baja, siempre
+  // la 2da más baja también, si está por debajo del promedio (no si es pareja arriba)
+  if(entries[1] && entries[1][1] < media - 0.05) debiles.add(entries[1][0]);
+  return debiles;
+}
+
+function esLogrado(score, comp){
+  // logrado = supera la vara alta Y no es una de las competencias más débiles
+  if(comp && __debiles.has(comp)) return false;
+  return score >= UMBRAL_LOGRADO;
+}
+
+// "profile" = inclinación relativa: hacia qué competencia empujaste MÁS,
+// corrigiendo el hecho de que algunas competencias aparecen más seguido que
+// otras en el test. Sin esta corrección, las competencias sobrerrepresentadas
+// (como pensamiento crítico) ganarían casi siempre. Esto hace que dos personas
+// con intenciones distintas reciban retratos distintos.
+function computeProfile(){
+  // Empuje real: cada respuesta vota sobre todo por su competencia dominante.
+  const push = {};
+  // Techo posible: cuánto habrías acumulado en cada competencia si en TODAS las
+  // preguntas hubieras elegido la opción que más la favorece.
+  const ceil = {};
+  Object.keys(COMP).forEach(k=>{push[k]=0; ceil[k]=0;});
+
+  const qList = questions && questions.length ? questions : [];
+  // techo: recorrer cada pregunta y sumar, por competencia, el mejor peso disponible
+  qList.forEach(q=>{
+    Object.keys(COMP).forEach(k=>{
+      let best=0;
+      q.options.forEach(o=>{ if(o.w[k]!==undefined) best=Math.max(best, o.w[k]); });
+      ceil[k]+=best;
+    });
+  });
+
+  Object.values(answers).forEach(ans=>{
+    if(!ans.w) return;
+    const entries = Object.entries(ans.w);
+    const maxLvl = Math.max(...entries.map(([,v])=>v));
+    entries.forEach(([k,lvl])=>{
+      push[k] += (lvl===maxLvl) ? lvl : lvl*0.33;
+    });
+  });
+
+  // ratio 0..1: qué fracción del máximo posible de esa competencia alcanzaste.
+  const ratio = {};
+  Object.keys(COMP).forEach(k=>{ ratio[k] = ceil[k]>0 ? (push[k]/ceil[k]) : 0; });
+  // rel: cuánto se despega cada competencia de tu propio promedio de ratios.
+  const vals = Object.values(ratio);
+  const mean = vals.reduce((a,b)=>a+b,0)/vals.length || 1;
+  const rel = {};
+  Object.keys(COMP).forEach(k=>{ rel[k] = mean>0 ? (ratio[k]/mean) : 0; });
+  return {push, ratio, rel};
+}
+
+/* ================== RESULTS ================== */
+function showResults(){
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const nivel = NIVEL_POR_FUNCION[userData.funcion]||1;
+  const scores = computeScores();
+  const profile = computeProfile();
+
+  // El arquetipo sale de la INCLINACIÓN relativa (hacia qué competencia
+  // empujaste más), no del nivel bruto. Así perfiles parejos igual difieren.
+  const relSorted = Object.entries(profile.rel).sort((a,b)=>b[1]-a[1]);
+  const topId = relSorted[0][0];
+  const arch = ARCHETYPES[topId];
+  document.getElementById('arch-name').textContent = arch.nombre;
+  document.getElementById('arch-desc').textContent = arch.desc;
+  document.getElementById('arch-icon').innerHTML = ICONS[arch.icon];
+
+  // Para la carta usamos el ranking por inclinación (top/2°) pero el nivel real
+  // (scores) para el "a trabajar", que es lo honesto de cara al plan.
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  __debiles = computeDebiles(scores); // debe estar listo antes de writeCarta y buildPlanLists
+  drawRadar(scores);
+  drawLegend(scores, nivel);
+  writeCarta(scores, relSorted, arch, nivel);
+  const lists = buildPlanLists(scores, nivel);
+  window.__logrado = lists.logrado;
+  window.__desarrollar = lists.desarrollar;
+  window.__archNombre = arch.nombre;
+
+  autoEnviarResultado();
+}
+
+/* ---- Radar ---- */
+function drawRadar(scores){
+  const svg = document.getElementById('radar');
+  const cx=140, cy=140, R=95;
+  const keys = Object.keys(COMP);
+  const N = keys.length;
+  const angle = i => (-Math.PI/2) + (i*2*Math.PI/N);
+  let html='';
+
+  // grid rings
+  for(let ring=1; ring<=3; ring++){
+    const r = R*ring/3;
+    let pts=[];
+    for(let i=0;i<N;i++){ pts.push((cx+r*Math.cos(angle(i)))+','+(cy+r*Math.sin(angle(i)))); }
+    html += `<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(238,240,235,0.10)" stroke-width="1"/>`;
+  }
+  // spokes + labels
+  keys.forEach((k,i)=>{
+    const x=cx+R*Math.cos(angle(i)), y=cy+R*Math.sin(angle(i));
+    html += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(238,240,235,0.10)" stroke-width="1"/>`;
+    const lx=cx+(R+16)*Math.cos(angle(i)), ly=cy+(R+16)*Math.sin(angle(i));
+    const anchor = Math.abs(Math.cos(angle(i)))<0.3 ? 'middle' : (Math.cos(angle(i))>0?'start':'end');
+    html += `<text x="${lx}" y="${ly+3}" font-family="IBM Plex Mono, monospace" font-size="9" fill="#78878a" text-anchor="${anchor}">${COMP[k].short}</text>`;
+  });
+  // data polygon
+  let dpts=[];
+  keys.forEach((k,i)=>{
+    const r = R*(scores[k]/3);
+    dpts.push((cx+r*Math.cos(angle(i)))+','+(cy+r*Math.sin(angle(i))));
+  });
+  html += `<polygon points="${dpts.join(' ')}" fill="rgba(226,137,74,0.20)" stroke="#e2894a" stroke-width="2"/>`;
+  keys.forEach((k,i)=>{
+    const r = R*(scores[k]/3);
+    const x=cx+r*Math.cos(angle(i)), y=cy+r*Math.sin(angle(i));
+    html += `<circle cx="${x}" cy="${y}" r="3.4" fill="${COMP[k].color}"/>`;
+  });
+  svg.innerHTML = html;
+}
+
+function drawLegend(scores, nivel){
+  const nombres = {0:'Preformal',1:'Receptivo',2:'Resolutivo',3:'Autónomo'};
+  const el = document.getElementById('radar-legend');
+  el.innerHTML = Object.keys(COMP).map(k=>{
+    const s = scores[k];
+    const lvl = nombres[Math.round(s)] || 'Preformal';
+    return `<div class="lg"><span class="sw" style="background:${COMP[k].color}"></span><b>${COMP[k].short}</b><span class="lvl">${lvl}</span></div>`;
+  }).join('') + `<div class="helper" style="margin-top:4px;">Tu función pide estas competencias en ${NIVEL_LABEL[nivel]} · ${NIVEL_DESC[nivel]}.</div>`;
+}
+
+/* ---- Carta ---- */
+function writeCarta(scores, relSorted, arch, nivel){
+  // relSorted: ranking por inclinación (qué elegís más). scores: nivel real 0..3.
+  const topId = relSorted[0][0], top2Id = relSorted[1][0];
+  const cName = COMP[topId].short, c2Name = COMP[top2Id].short;
+  // El punto a trabajar sale del nivel real más bajo. Pero evitamos nombrar la
+  // MISMA competencia como fortaleza y debilidad (quedaba contradictorio: "te
+  // apoyás en adaptabilidad... donde más te falta es adaptabilidad"). Si el más
+  // bajo coincide con la fortaleza principal, usamos el siguiente más bajo.
+  const scoreSorted = Object.entries(scores).sort((a,b)=>a[1]-b[1]);
+  let lowEntry = scoreSorted.find(([k])=> k!==topId && k!==top2Id) || scoreSorted.find(([k])=> k!==topId) || scoreSorted[0];
+  const lowId = lowEntry[0];
+  const lowName = COMP[lowId].short;
+  const nombre = userData.nombre!=='(sin nombre)'?userData.nombre.split(' ')[0]:'educador/a';
+  const cantidadLogradas = Object.keys(COMP).filter(k=>esLogrado(scores[k], k)).length;
+
+  let body = `<b>${nombre}</b>, si tuviéramos que describirte en una frase, serías quien conduce apoyándose en <b>${cName.toLowerCase()}</b>`;
+  body += `, con un buen respaldo de <b>${c2Name.toLowerCase()}</b>. `;
+
+  // el punto a trabajar siempre existe (por la regla de los más débiles)
+  body += `Donde el sendero te pide caminar más es en <b>${lowName.toLowerCase()}</b> — no como una falla, sino como el próximo tramo natural de tu formación. `;
+
+  body += `El Manual espera que en tu función estas competencias estén en <b>${NIVEL_LABEL[nivel]}</b>. `;
+  if(cantidadLogradas>=3){
+    body += `Ya mostrás solidez en varias, así que el trabajo ahora es sostenerlo y afinar los puntos que todavía tienen margen — nadie llega perfecto, y eso está bien.`;
+  } else if(cantidadLogradas>=1){
+    body += `Tenés una base para construir, y también terreno real por recorrer. Ese equilibrio entre lo que ya sabés y lo que falta es justo de lo que se trata un plan de desempeño.`;
+  } else {
+    body += `Es un punto de partida honesto, no un diagnóstico definitivo. Con acompañamiento y práctica concreta este período, hay mucho camino para avanzar.`;
+  }
+
+  document.getElementById('carta').innerHTML = `${body}<span class="firma">— Tu retrato de hoy, no tu sentencia. ${arch.nombre}.</span>`;
+}
+
+/* ---- Plan lists ---- */
+function buildPlanLists(scores, nivel){
+  const logrado=[], desarrollar=[];
+  __debiles = computeDebiles(scores); // define qué competencias son las más débiles
+
+  // esenciales: umbral alto + regla de los más débiles
+  const passMap = {};
+  Object.keys(COMP).forEach(k=>{
+    const s = scores[k];
+    const pass = esLogrado(s, k);
+    passMap[k] = pass;
+    const meta = `${COMP[k].nombre} — ${NIVEL_LABEL[nivel]} (${NIVEL_DESC[nivel]})`;
+    if(pass){
+      const porque = (s>=2.5)
+        ? `Es una de tus fortalezas más claras: la mostrás de forma sólida y consistente.`
+        : `La tenés consolidada en tu desempeño cotidiano — un buen nivel, con margen para seguir puliéndola.`;
+      logrado.push({idx:`Competencia esencial · ${COMP[k].nombre}`, text:`${porque}`});
+    } else {
+      let porque;
+      if(s<FLOOR_LOGRADO){
+        porque = `Es hoy tu área más floja: casi no aparece en tus respuestas. Vale la pena ponerle foco.`;
+      } else if(__debiles.has(k) && s>=UMBRAL_LOGRADO){
+        // está bien en absoluto, pero es de sus puntos comparativamente más flojos
+        porque = `Está en un nivel razonable, pero es —comparado con tus fortalezas— de lo que más te conviene seguir puliendo este período.`;
+      } else if(__debiles.has(k)){
+        porque = `Es de tus puntos más flojos hoy: aparece de a ratos pero todavía no de forma constante. Buen lugar para poner energía.`;
+      } else {
+        porque = `Aparece de a ratos, pero todavía no de forma constante. Le falta un empujón para consolidarse.`;
+      }
+      desarrollar.push({idx:`Competencia esencial · ${COMP[k].nombre}`, text:`${porque} Meta de la función: ${meta}.`});
+    }
+  });
+
+  // clusters: promedio de las competencias que los disparan, con la misma vara alta
+  CLUSTERS.forEach(c=>{
+    const triggers = c.trigger;
+    const prom = triggers.reduce((a,t)=>a+scores[t],0)/triggers.length;
+    const text = (c.text2 && nivel>=2)?c.text2:c.text1;
+    const algunDebil = triggers.some(t=>__debiles.has(t));
+    if(prom>=UMBRAL_LOGRADO && !algunDebil){
+      logrado.push({idx:`${c.nombre} (${c.ref})`, text});
+    } else {
+      const flojas = triggers.filter(t=>!passMap[t]).map(t=>COMP[t].short).join(' y ') || COMP[triggers[0]].short;
+      desarrollar.push({idx:`${c.nombre} (${c.ref})`, text:`Se apoya en ${flojas}, que todavía no está del todo firme. ${text}`});
+    }
+  });
+
+  // rama: pide una base esencial mayormente sólida (3 de 5 como mínimo)
+  if(userData.rama!=='ninguna' && RAMA_ITEMS[userData.rama]){
+    const logradosCount = Object.values(passMap).filter(Boolean).length;
+    RAMA_ITEMS[userData.rama].forEach(item=>{
+      if(logradosCount>=3) logrado.push({idx:item.ref, text:item.text});
+      else desarrollar.push({idx:item.ref, text:`Conviene revisarlo con tu Acompañante: ${item.text}`});
+    });
+  }
+
+  document.getElementById('count-logrado').textContent = logrado.length;
+  document.getElementById('count-desarrollar').textContent = desarrollar.length;
+  document.getElementById('list-logrado').innerHTML = logrado.length? logrado.map(li=>`<li><span class="idx">${li.idx}</span>${li.text}</li>`).join('') : '<li>Todavía no hay competencias consolidadas — es un punto de partida honesto, no un problema. Con tu Acompañante van a trazar el camino.</li>';
+  document.getElementById('list-desarrollar').innerHTML = desarrollar.length? desarrollar.map(li=>`<li><span class="idx">${li.idx}</span>${li.text}</li>`).join('') : '<li>¡Muy buen recorrido! No quedó nada urgente por trabajar. Igual conviene revisar con tu Acompañante cómo seguir creciendo.</li>';
+
+  return {logrado, desarrollar};
+}
+
+/* ================== PDF ================== */
+function buildPDF(logrado, desarrollar, archNombre){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt', format:'a4'});
+  const marginX = 48;
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const contentW = pageW - marginX*2;
+  let y = 56;
+
+  function checkPage(needed){
+    if(y+needed > pageH-50){ doc.addPage(); y=56; }
+  }
+  function heading(text, size){
+    doc.setFont('helvetica','bold'); doc.setFontSize(size); doc.setTextColor(30,30,30);
+    checkPage(size+10);
+    doc.text(text, marginX, y); y += size+8;
+  }
+  function paragraph(text, opts={}){
+    doc.setFont('helvetica', opts.bold?'bold':'normal');
+    doc.setFontSize(opts.size||10.5);
+    doc.setTextColor(...(opts.color||[50,50,50]));
+    const lines = doc.splitTextToSize(text, contentW - (opts.indent||0));
+    checkPage(lines.length*13+6);
+    doc.text(lines, marginX+(opts.indent||0), y);
+    y += lines.length*13 + (opts.gap!==undefined?opts.gap:6);
+  }
+  function rule(){
+    checkPage(14);
+    doc.setDrawColor(210,210,210); doc.line(marginX, y, pageW-marginX, y); y+=14;
+  }
+
+  heading('El Fogón de los Educadores — Resultado', 15);
+  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(90,90,90);
+  paragraph(`Nombre y apellido: ${userData.nombre}`, {size:10.5, gap:2});
+  paragraph(`Organismo: ${ORGANISMO_FIJO}`, {size:10.5, gap:2});
+  paragraph(`Función: ${FUNCION_LABEL}`, {size:10.5, gap:2});
+  paragraph(`Período: ${PERIODO_FIJO}`, {size:10.5, gap:2});
+  paragraph(`Perfil de partida: ${archNombre}`, {size:10.5, gap:10});
+  rule();
+
+  heading('A) Logrado', 12.5);
+  if(logrado.length){
+    logrado.forEach(li=>{
+      paragraph(li.idx, {bold:true, size:10, color:[40,90,60], gap:2});
+      paragraph(li.text.replace(/<[^>]+>/g,''), {size:10, indent:10, gap:10});
+    });
+  } else {
+    paragraph('Todavía no hay indicadores consolidados de forma sostenida — es el punto de partida.', {size:10, gap:10});
+  }
+
+  y += 4; rule();
+  heading('B) A desarrollar', 12.5);
+  if(desarrollar.length){
+    desarrollar.forEach(li=>{
+      paragraph(li.idx, {bold:true, size:10, color:[170,90,40], gap:2});
+      paragraph(li.text.replace(/<[^>]+>/g,''), {size:10, indent:10, gap:10});
+    });
+  } else {
+    paragraph('Base sólida y pareja. Igual conviene revisar con el Acompañante qué sigue.', {size:10, gap:10});
+  }
+
+  return doc;
+}
+
+/* ================== ACTIONS ================== */
+// ⚠️ IMPORTANTE: pegá acá la URL de tu Google Apps Script (termina en /exec).
+// Mientras esté vacía, la página NO envía nada (modo prueba: solo muestra el
+// resultado en pantalla). Ver instrucciones en apps_script_fogon.gs.
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYoKBaHacMmGBjc5S0MuIODhjonFRuZRHq_uUxNVqupLiT9Ng7Ap2_dPeYw03u7DnG5Q/exec';
+
+function showToast(m){const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600);}
+
+function nombreArchivo(){
+  const safe=(userData.nombre||'resultado').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_');
+  return `fogon_educadores_${safe}.pdf`;
+}
+
+function descargarPDF(){
+  const doc = buildPDF(window.__logrado||[], window.__desarrollar||[], window.__archNombre||'');
+  doc.save(nombreArchivo());
+  showToast('PDF descargado ✓');
+}
+
+// Empaqueta el resultado en el formato que espera el Apps Script.
+function armarPayload(){
+  const strip = s => (s||'').replace(/<[^>]+>/g,'');
+  return {
+    nombre: userData.nombre || '—',
+    organismo: userData.organismo || ORGANISMO_FIJO,
+    funcion: FUNCION_LABEL,
+    periodo: PERIODO_FIJO,
+    arquetipo: window.__archNombre || '—',
+    logrado: (window.__logrado||[]).map(li=>({titulo:li.idx, texto:strip(li.text)})),
+    desarrollar: (window.__desarrollar||[]).map(li=>({titulo:li.idx, texto:strip(li.text)}))
+  };
+}
+
+// Se dispara solo al terminar el test. Manda el resultado al Apps Script, que
+// crea el Google Doc y le manda el mail a Juanma automáticamente. El usuario no
+// hace nada. (Si APPS_SCRIPT_URL está vacío, no envía: útil para probar local.)
+function autoEnviarResultado(){
+  const statusEl = document.getElementById('envio-status');
+  if(!APPS_SCRIPT_URL){
+    if(statusEl) statusEl.textContent = 'Tu resultado está listo (modo prueba: el envío automático se activa cuando se configure el servidor). Podés descargar tu PDF acá abajo.';
+    return;
+  }
+  if(statusEl) statusEl.textContent = 'Enviando tu resultado…';
+  // mode:'no-cors' permite el POST desde GitHub Pages sin que el navegador lo
+  // bloquee; no podemos leer la respuesta, pero el Apps Script igual procesa.
+  fetch(APPS_SCRIPT_URL, {
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'}, // text/plain evita el preflight CORS
+    body: JSON.stringify(armarPayload())
+  }).then(()=>{
+    if(statusEl) statusEl.textContent = 'Tu resultado se envió a tu Acompañante ✓ — ya le llegó por mail. Descargá tu PDF acá abajo para vos.';
+    showToast('Resultado enviado ✓');
+  }).catch(()=>{
+    if(statusEl) statusEl.textContent = 'No se pudo enviar automáticamente. Descargá tu PDF acá abajo y pasáselo a tu Acompañante.';
+    showToast('No se pudo enviar — descargá el PDF');
+  });
+}
+
+function restart(){document.getElementById('screen-results').classList.remove('active'); document.getElementById('screen-intro').classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
